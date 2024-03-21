@@ -3,6 +3,7 @@ import Tesseract from "tesseract.js";
 import Loader from "./Loader";
 import { MdOutlineMusicOff } from "react-icons/md";
 import { MdOutlineMusicNote } from "react-icons/md";
+import { FaRegImage } from "react-icons/fa6";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,22 +60,25 @@ const App = () => {
     <div className="container" style={{ height: "100vh" }}>
       <div className="header">
         <div className="main-container">
-          {!isLoading && <h1>Image To Text</h1>}
-          {isLoading && (
-            <>
-              <Loader />
-              <p className="progress">Converting: {progress}%</p>
-            </>
-          )}
-          {!isLoading && !text && (
+          <div className="left">
+            <h1>SCRIPT SENSE</h1>
             <>
               <input
                 type="file"
+                hidden
+                id="imageUpload"
                 onChange={(e) =>
                   setImage(URL.createObjectURL(e.target.files[0]))
                 }
                 className="file"
               />
+              <label htmlFor="imageUpload">
+                <div className="label">
+                  {image && <img src={image} alt="" />}
+                  <FaRegImage className="img-icon" />
+                  <p>Choose what you want to convert into text</p>
+                </div>
+              </label>
               <input
                 type="button"
                 onClick={handleSubmit}
@@ -82,33 +86,41 @@ const App = () => {
                 className="btn"
               />
             </>
-          )}
-          {!isLoading && text && (
-            <>
-              <textarea
-                rows="30"
-                value={text}
-                className="textarea"
-                onChange={(e) => setText(e.target.value)}
-              ></textarea>
-              <div className="voice">
-                <button onClick={handleReadAloud} className="btn-one">
-                  Read Aloud
-                </button>
-                <button onClick={togglePause} className="btn-voice">
-                  {isPaused ? (
-                    <MdOutlineMusicOff
-                      style={{ padding: "0", margin: "0", fontSize: "22px" }}
-                    />
-                  ) : (
-                    <MdOutlineMusicNote
-                      style={{ padding: "0", margin: "0", fontSize: "22px" }}
-                    />
-                  )}
-                </button>
+          </div>
+          <div className="right">
+            {isLoading && (
+              <div className="pro">
+                <Loader />
+                <p className="progress">Converting: {progress}%</p>
               </div>
-            </>
-          )}
+            )}
+            {!isLoading && text && (
+              <div className="result">
+                <textarea
+                  rows="20"
+                  value={text}
+                  className="textarea"
+                  onChange={(e) => setText(e.target.value)}
+                ></textarea>
+                <div className="voice">
+                  <button onClick={handleReadAloud} className="btn-one">
+                    Read Aloud
+                  </button>
+                  <button onClick={togglePause} className="btn-voice">
+                    {isPaused ? (
+                      <MdOutlineMusicOff
+                        style={{ padding: "0", margin: "0", fontSize: "22px" }}
+                      />
+                    ) : (
+                      <MdOutlineMusicNote
+                        style={{ padding: "0", margin: "0", fontSize: "22px" }}
+                      />
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
