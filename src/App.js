@@ -48,9 +48,11 @@ const App = () => {
   };
 
   const togglePause = () => {
-    if (speechSynthesis.paused) {
+    if (!speechSynthesis.speaking) return;
+  
+    if (isPaused) {
       speechSynthesis.resume();
-    } else if (speechSynthesis.speaking) {
+    } else {
       speechSynthesis.pause();
     }
     setIsPaused(!isPaused);

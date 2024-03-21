@@ -34,7 +34,7 @@ body {
 }
 @media (max-width : 600px){
   .btn{
-    font-size: 20px;
+    font-size: 17px;
   }
 }
 .left {
@@ -100,7 +100,7 @@ body {
   font-family: "poppins", sans-serif;
 }
 .label > p {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 300;
   color: rgba(228, 236, 234, 0.658);
 }
