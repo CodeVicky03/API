@@ -11,7 +11,7 @@ const App = () => {
   const [text, setText] = useState("");
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [language, setLanguage] = useState("es");
+  const [language, setLanguage] = useState("eng");
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -49,7 +49,6 @@ const App = () => {
     }
   };
   
-
   const handleReadAloud = async () => {
     if (!text) return;
     if (window.speechSynthesis.speaking) {
@@ -104,6 +103,7 @@ const App = () => {
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               >
+                <option value="eng">English</option>
                 <option value="es">Spanish</option>
                 <option value="fr">French</option>
                 <option value="de">German</option>
