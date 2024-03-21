@@ -1,3 +1,4 @@
+// Importing File, Extensions and Icons
 import React, { useState } from "react";
 import Tesseract from "tesseract.js";
 import axios from "axios";
@@ -6,6 +7,7 @@ import { MdOutlineMusicOff, MdOutlineMusicNote } from "react-icons/md";
 import { FaRegImage } from "react-icons/fa6";
 
 const App = () => {
+  // useState for data store and manage
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState("");
   const [text, setText] = useState("");
@@ -14,9 +16,12 @@ const App = () => {
   const [language, setLanguage] = useState("eng");
 
   const handleSubmit = async () => {
+    // Function for handling image to text Object Character Recognition (OCR)
     setIsLoading(true);
     try {
-      const { data: { text: recognizedText } } = await Tesseract.recognize(image, "eng", {
+      const {
+        data: { text: recognizedText },
+      } = await Tesseract.recognize(image, "eng", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             setProgress(parseInt(m.progress * 100));
@@ -24,31 +29,37 @@ const App = () => {
         },
       });
       setText(recognizedText);
-  
+
+      //  Function to translate text into the user's selected language using Rapid API's translator service
+      const encodedParams = new URLSearchParams();
+      encodedParams.set("source_language", "en");
+      encodedParams.set("target_language", language);
+      encodedParams.set("text", recognizedText);
+
       const options = {
+        // Send request
         method: "POST",
-        url: "https://rapid-translate-multi-traduction.p.rapidapi.com/t",
+        url: "https://text-translator2.p.rapidapi.com/translate",
         headers: {
-          "content-type": "application/json",
-          "X-RapidAPI-Key": "9a7b6ce910msh46589c1c55f9f60p12aab4jsn605fe8ce9b0b",
-          "X-RapidAPI-Host": "rapid-translate-multi-traduction.p.rapidapi.com",
+          "content-type": "application/x-www-form-urlencoded",
+          "X-RapidAPI-Key":
+            "9a7b6ce910msh46589c1c55f9f60p12aab4jsn605fe8ce9b0b",
+          "X-RapidAPI-Host": "text-translator2.p.rapidapi.com",
         },
-        data: {
-          from: "en",
-          to: language,
-          q: recognizedText,
-        },
+        data: encodedParams,
       };
-  
+      // Get request
       const response = await axios.request(options);
-      setText(response.data);
+      const translatedText = response.data.data.translatedText;
+      setText(translatedText);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
+  // Function fro text to vioce using window.speek (speechSynthesis)
   const handleReadAloud = async () => {
     if (!text) return;
     if (window.speechSynthesis.speaking) {
@@ -64,7 +75,7 @@ const App = () => {
     window.speechSynthesis.speak(utterance);
   };
   
-
+  //  Funcrion for toggle voice pause and resume
   const togglePause = () => {
     if (!speechSynthesis.speaking) return;
 
